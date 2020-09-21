@@ -62,5 +62,6 @@ if __name__ == '__main__':
     print('x_vec:',x[:,0])
     print('y_vec:',y)
 
-    plt.plot(x[:,0],y,marker = '.',linestyle = '')
+
+    plt.plot(x[:,0],y,linestyle = '',marker = '.')
     plt.show()

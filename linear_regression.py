@@ -12,6 +12,13 @@ Script for playing around with different linear regression techniques
 # more general a and b are the weights w1 and w0: a = w1, b = w0
 # the variable  x1 = x (slope) and x0 = 1 (offset) x0 is always 1
 # --> f(x1,x0) = w1*x1 + w0*x0
+
+
+
+def mse(y,y_predict):
+        mse = np.mean((y-y_predict)**2)
+        return mse
+
 if __name__ == '__main__':
     print('hello')
     # In this case w1 and w0 have the following values
@@ -55,13 +62,53 @@ if __name__ == '__main__':
     print('x_vec:',x[:,0])
     print('y_vec:',y)
 
-    # Creting more samples
-    x = np.array(list([i,1] for i in range(100)))
+    # Creating n samples
+    n = 100
+    x = np.array(list([i,1] for i in range(n)))
     y = w_vec.dot(x.T)
 
     print('x_vec:',x[:,0])
     print('y_vec:',y)
 
+    # plotting the undisturbed sample data (no noise)
+    # plt.plot(x[:,0],y,linestyle = '',marker = '.',label = 'sample_no_noise')
+    # plt.show()
 
-    plt.plot(x[:,0],y,linestyle = '',marker = '.')
+    # Adding noise to y values
+    t = 10*(np.random.random_sample((n,))-0.5)
+    print(np.mean(t))
+    yn = y+t
+
+    # plotting the disturbed sample data (with noise)
+    # plt.plot(x[:, 0], yn, linestyle='', marker='.',label = 'sample_with_noise')
+    # plt.legend(loc = 0)
+    # plt.xlabel('x1')
+    # plt.ylabel('y')
+    # plt.show()
+
+    # Linear regression
+    # optimize the parameters theta1 and theta0 in theta_vec so that they minimize the mean squared error
+    # initial guess (random) of the parameters theta1 and theta0
+    # theta1 = np.random.rand()
+    # theta0 = np.random.rand()
+    # theta_vec = [theta1,theta0]
+    # print(theta_vec)
+    # or
+    theta_vec = np.random.random_sample((2,))
+    print(theta_vec)
+
+    y_predict = theta_vec.dot(x.T)
+
+    # plotting the y_predict and yn values
+    plt.plot(x[:, 0], y_predict, linestyle='-', marker='', label='y_predict')
+    plt.plot(x[:, 0], yn, linestyle='', marker='.', label='sample_with_noise')
+    plt.legend(loc=0)
+    plt.xlabel('x1')
+    plt.ylabel('y')
     plt.show()
+
+    # calculating the MSE
+    error = mse(yn,y_predict)
+    print('MSE of the initial guess:',error)
+
+    # print(yn)

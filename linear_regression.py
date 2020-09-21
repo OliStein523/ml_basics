@@ -86,7 +86,11 @@ if __name__ == '__main__':
     # plt.ylabel('y')
     # plt.show()
 
+
+    ###################
     # Linear regression
+    ###################
+
     # optimize the parameters theta1 and theta0 in theta_vec so that they minimize the mean squared error
     # initial guess (random) of the parameters theta1 and theta0
     # theta1 = np.random.rand()
@@ -100,15 +104,52 @@ if __name__ == '__main__':
     y_predict = theta_vec.dot(x.T)
 
     # plotting the y_predict and yn values
-    plt.plot(x[:, 0], y_predict, linestyle='-', marker='', label='y_predict')
-    plt.plot(x[:, 0], yn, linestyle='', marker='.', label='sample_with_noise')
-    plt.legend(loc=0)
-    plt.xlabel('x1')
-    plt.ylabel('y')
+    # plt.plot(x[:, 0], y_predict, linestyle='-', marker='', label='y_predict')
+    # plt.plot(x[:, 0], yn, linestyle='', marker='.', label='sample_with_noise')
+    # plt.legend(loc=0)
+    # plt.xlabel('x1')
+    # plt.ylabel('y')
+    # plt.show()
+    # plt.close()
+
+    # optimization of theta
+
+    eta = 0.0001  # learning rate, needs tweaking
+    mse_l = [] # list for storing the errors
+    small_enough = 1e-8 # break condition
+    error = 0
+    while True:
+        y_predict = theta_vec.dot(x.T)
+        error_old = error
+        error = mse(yn, y_predict) # loss (error) function: mse
+        mse_l.append(error)
+
+        # gradient descent
+        gradients = (2/n) * x.T.dot(y_predict - yn)
+        theta_vec = theta_vec - eta * gradients
+
+        # breaks the loop in case the change of the error is small enough
+        if abs(error_old-error) <= small_enough:
+            print(abs(error_old-error))
+            break
+
+    print('final theta:',theta_vec)
+    print('final mse:',error)
+    y_final = theta_vec.dot(x.T)
+
+    # plot of the mean squared error
+    plt.plot(mse_l)
+    plt.yscale('log') # y axis log scale
+    plt.xlabel('iteration')
+    plt.ylabel('mean squared error')
     plt.show()
 
-    # calculating the MSE
-    error = mse(yn,y_predict)
-    print('MSE of the initial guess:',error)
+    # plot of the sample data and the fitted model
+    plt.plot(x[:,0],yn,linestyle = '',marker = '.',label = 'sample_data')
+    plt.plot(x[:,0],y_final,linestyle = '-',marker = '',label = 'regression model')
+    plt.legend(loc = 0)
+    plt.xlabel('x1')
+    plt.ylabel('y_final')
+    plt.show()
 
     # print(yn)
